@@ -28,10 +28,17 @@ module.exports = {
         'card': '0px 2px 4px rgba(0, 0, 0, 0.05)'
       },
       width: {
-        'brand': '5.625rem'
+        'brand': '5.625rem',
+        'search': '49.375rem'
       },
       height: {
         'brand': '5.625rem'
+      },
+      screens: {
+        'xl': '75.063rem',
+      },
+      maxWidth: {
+        '7xl': '75.063rem',
       }
     },
   },

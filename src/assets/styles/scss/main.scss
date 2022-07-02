@@ -8,3 +8,71 @@
 body {
   background-color: #f6f7fb;
 }
+
+.banner {
+  background-image: url('@/assets/images/backgroundImg.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 138px;
+}
+
+.form-check-input:checked[type=checkbox] {
+  &.types {
+    background-image: url("@/assets/images/icons/check.svg");
+  }
+  &.locations {
+    background-image: url("@/assets/images/icons/circle.svg");
+    background-size: 10px;
+  }
+}
+
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  & li {
+    display: inline;
+    &.active > a {
+      background: #1E86FF;
+      border: 1px solid #1E86FF;
+      color: #fff;
+    }
+    &:first-child > a {
+      margin-left: 0;
+      border-top-left-radius: 4px;
+      border-bottom-left-radius: 4px;
+    }
+    &:last-child > a {
+      border-top-right-radius: 4px;
+      border-bottom-right-radius: 4px;
+    }
+    & a {
+      position: relative;
+      float: left;
+      padding: 6px 12px;
+      margin-left: 0.5rem;
+      line-height: 1.42857143;
+      color: #B7BCCE;
+      text-decoration: none;
+      background-color: #fff;
+      border: 1px solid #B7BCCE;
+      border-radius: 4px;
+      transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+      transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+      transition-duration: 150ms;
+      transition-duration: 300ms;
+      transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+      font-size: 0.75rem;
+      &:hover {
+        background: #FFF;
+        border: 1px solid #1E86FF;
+        color: #1E86FF;
+      }
+      & svg {
+        width: auto;
+        height: 1.05rem;
+        fill: currentColor;
+      }
+    }
+  }
+}
