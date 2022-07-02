@@ -1,39 +1,53 @@
 <template>
-  <div class="bg-white shadow-card p-4 rounded flex flex-row space-x-4">
+  <router-link :to="`/job/${job.id}`" class="bg-white shadow-card p-4 rounded flex flex-row space-x-4">
     <div class="w-auto">
-      <div class="w-brand h-brand bg-white-smoke-100 flex items-center justify-center">
+      <img v-if="job.company_logo" :src="job.company_logo" :alt="job.company_name" class="w-brand h-brand object-contain">
+      <div v-else class="w-brand h-brand bg-white-smoke-100 flex items-center justify-center">
         <p class="text-gray-50 font-medium text-xs">not found</p>
       </div>
     </div>
     <div class="w-full flex">
       <div class="w-full">
-        <p class="text-dark-500 font-bold text-xs">Kasisto</p>
-        <p class="text-dark-500 font-normal text-lg"> Frontend Software</p>
-        <span class="border border-dark-500 rounded text-xs px-2 py-1 text-dark-500 font-bold border-solid">
-          Full time
+        <p class="text-dark-500 font-bold text-xs">{{ job.company_name }}</p>
+        <p class="text-dark-500 font-normal text-lg"> {{ job.title }}</p>
+        <span class="border border-dark-500 rounded text-xs px-2 py-1 text-dark-500 font-bold border-solid capitalize">
+          {{ typeJob }}
         </span>
       </div>
-      <div class="w-auto flex flex-row space-x-4">
-        <span class="whitespace-nowrap inline-flex text-xs items-center text-gray-100">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-100 fill-current mr-1"><path d="M11 19.95V18Q10.175 18 9.588 17.413Q9 16.825 9 16V15L4.2 10.2Q4.125 10.65 4.062 11.1Q4 11.55 4 12Q4 15.025 5.988 17.3Q7.975 19.575 11 19.95ZM17.9 17.4Q18.925 16.275 19.462 14.887Q20 13.5 20 12Q20 9.55 18.638 7.525Q17.275 5.5 15 4.6V5Q15 5.825 14.413 6.412Q13.825 7 13 7H11V9Q11 9.425 10.713 9.712Q10.425 10 10 10H8V12H14Q14.425 12 14.713 12.287Q15 12.575 15 13V16H16Q16.65 16 17.175 16.387Q17.7 16.775 17.9 17.4ZM12 22Q9.925 22 8.1 21.212Q6.275 20.425 4.925 19.075Q3.575 17.725 2.788 15.9Q2 14.075 2 12Q2 9.925 2.788 8.1Q3.575 6.275 4.925 4.925Q6.275 3.575 8.1 2.787Q9.925 2 12 2Q14.075 2 15.9 2.787Q17.725 3.575 19.075 4.925Q20.425 6.275 21.212 8.1Q22 9.925 22 12Q22 14.075 21.212 15.9Q20.425 17.725 19.075 19.075Q17.725 20.425 15.9 21.212Q14.075 22 12 22Z"/></svg>
-          New York
+      <div class="w-auto flex flex-row space-x-4 items-end">
+        <span
+          class="whitespace-nowrap inline-flex text-xs items-center text-gray-100 font-medium"
+          :class="['uk', 'usa'].includes(job.candidate_required_location) ? 'uppercase' : 'capitalize'"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="text-gray-100 fill-current mr-1" height="20" width="20"><path d="M9.188 16.542V14.938Q8.5 14.938 8.021 14.458Q7.542 13.979 7.542 13.292V12.458L3.583 8.5Q3.5 8.875 3.458 9.25Q3.417 9.625 3.417 10Q3.417 12.5 5.062 14.365Q6.708 16.229 9.188 16.542ZM14.854 14.438Q15.708 13.521 16.146 12.385Q16.583 11.25 16.583 10Q16.583 7.979 15.469 6.313Q14.354 4.646 12.479 3.917V4.229Q12.479 4.917 12 5.396Q11.521 5.875 10.833 5.875H9.188V7.521Q9.188 7.875 8.948 8.115Q8.708 8.354 8.354 8.354H6.708V10H11.646Q12 10 12.24 10.229Q12.479 10.458 12.479 10.812V13.292H13.292Q13.833 13.292 14.26 13.604Q14.688 13.917 14.854 14.438ZM10 18.333Q8.271 18.333 6.75 17.677Q5.229 17.021 4.104 15.896Q2.979 14.771 2.323 13.25Q1.667 11.729 1.667 10Q1.667 8.271 2.323 6.75Q2.979 5.229 4.104 4.104Q5.229 2.979 6.75 2.323Q8.271 1.667 10 1.667Q11.729 1.667 13.25 2.323Q14.771 2.979 15.896 4.104Q17.021 5.229 17.677 6.75Q18.333 8.271 18.333 10Q18.333 11.729 17.677 13.25Q17.021 14.771 15.896 15.896Q14.771 17.021 13.25 17.677Q11.729 18.333 10 18.333Z"/></svg>
+            {{ job.candidate_required_location }}
         </span>
-        <span class="whitespace-nowrap inline-flex text-xs items-center text-gray-100">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-100 fill-current mr-1" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/><path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
-          5 days ago
+        <span class="whitespace-nowrap inline-flex text-xs items-center text-gray-100 font-medium">
+          <svg xmlns="http://www.w3.org/2000/svg" class="text-gray-100 fill-current mr-1" height="20" width="20" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/><path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+          {{ relativeTime }}
         </span>
       </div>
     </div>
-  </div>
+  </router-link>
 </template>
 
 <script>
+import moment from 'moment-timezone'
 export default {
   name: 'CardJobComponent',
   props: {
     job: {
       type: Object,
       default: () => {}
+    }
+  },
+  computed: {
+    typeJob() {
+      return this.job.job_type ? this.job.job_type.split('_').join(' ') : 'Unspecified'
+    },
+    relativeTime() {
+      const localTime = moment.utc(this.job.publication_date).toDate()
+      return moment(localTime).fromNow()
     }
   }
 }
