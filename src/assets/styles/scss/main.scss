@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
 
 *, html {
   font-family: 'Roboto', sans-serif ;
@@ -20,6 +21,7 @@ body {
 .form-check-input:checked[type=checkbox] {
   &.types {
     background-image: url("@/assets/images/icons/check.svg");
+    background-size: 10px;
   }
   &.locations {
     background-image: url("@/assets/images/icons/circle.svg");
@@ -75,4 +77,9 @@ body {
       }
     }
   }
+}
+
+.description > * {
+  line-height: 1.5rem;
+    /* 24px */
 }

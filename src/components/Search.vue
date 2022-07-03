@@ -1,5 +1,5 @@
 <template>
-  <form class="w-full" @keyup.enter="searchJob">
+  <form @submit.prevent class="w-full">
     <div class="relative shadow-search bg-white rounded">
       <div class="w-full relative">
         <span class="absolute inset-y-0 left-0 flex items-center pl-3">
@@ -9,14 +9,18 @@
         <input
           v-model="keyword"
           type="text"
-          class="w-full h-14 py-3 pl-10 pr-4 text-gray-100 bg-white border rounded focus:border-blue-500 hover:border-blue-500 focus:outline-none focus:ring hover:ring text-xs font-normal transition duration-500 ease-in-out"
+          class="w-full h-14 py-3 pl-10 pr-4 text-gray-100 bg-white border rounded focus:border-blue-500 hover:border-blue-500 focus:outline-none focus:ring hover:ring text-xs font-normal transition duration-500 ease-in-out placeholder:text-gray-100 placeholder:font-normal"
           :placeholder="placeholder"
         >
-
         <span class="absolute inset-y-0 right-0 pr-1 py-1 w-36">
-          <button class="h-full w-full bg-blue-100 text-white font-medium	rounded transition duration-500 ease-in-out hover:opacity-80" @click.enter="searchJob">
-            Search
-          </button>
+          <div class="flex h-full items-center text-gray-100">
+            <p v-show="keyword && keyword.length" @click="clear" class="pr-3 cursor-pointer">
+              x
+            </p>
+            <button class="h-full w-full bg-blue-100 text-white font-medium	rounded transition duration-500 ease-in-out hover:opacity-80" @click.enter="searchJob">
+              Search
+            </button>
+          </div>
         </span>
       </div>
     </div>
@@ -44,9 +48,16 @@ export default {
     keyword: null
   }),
   methods: {
+    clear() {
+      this.keyword = null
+      this.$emit('fetchData')
+    },
     searchJob() {
       if(this.keyword && this.keyword.length > 0) {
         this.$emit('search', this.keyword)
+      } else {
+        console.log('here')
+        this.$emit('fetchData')
       }
     }
   }

@@ -6,12 +6,13 @@
         <Search
           placeholder="Title, companies, expertise or benefits"
           @search="searchJob"
+          @fetchData="fetchData"
         />
       </div>
     </div>
-    <div class="flex flex-row space-x-4 my-5">
+    <div class="flex md:flex-row flex-col md:space-x-4 my-5">
       <!-- Filters -->
-      <div class="w-1/3">
+      <div class="md:w-1/3 w-full">
         <Filters
           :locations="locations"
           :filters="filters"
@@ -19,7 +20,7 @@
         />
       </div>
       <!-- Content List -->
-      <div class="w-2/3">
+      <div class="md:w-2/3 w-full">
         <div v-show="isLoading">
           <div v-for="(_, index) in new Array(5)" :key="index" class="mb-4" >
             <CardSkeleton />
@@ -79,7 +80,7 @@ export default {
     jobs: [],
     jobsArrInitial: [],
     jobList: [],
-    locations: ['europe', 'uk','usa', 'worldwide'],
+    locations: ['Europe', 'UK','USA', 'Worldwide'],
     keyword: '',
     totalPages: 0,
     iconPrev: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512"><path d="M192 448c-8.188 0-16.38-3.125-22.62-9.375l-160-160c-12.5-12.5-12.5-32.75 0-45.25l160-160c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25L77.25 256l137.4 137.4c12.5 12.5 12.5 32.75 0 45.25C208.4 444.9 200.2 448 192 448z"/></svg>',
@@ -87,8 +88,8 @@ export default {
     limitItems: 5,
     filters: {
       fullTime: false,
-      search: null,
-      location: ['worldwide']
+      keyword:  null,
+      location: ['USA']
     },
   }),
   mounted() {
@@ -134,12 +135,7 @@ export default {
       this.isLoading = true
       try {
         const { data } = await axios.get(`${process.env.VUE_APP_BASE_URL}`)
-        this.jobsArrInitial = _.map(data.jobs, (job) => {
-          return {
-            ...job,
-            candidate_required_location: job.candidate_required_location.toLowerCase()
-          }
-        })
+        this.jobsArrInitial = data.jobs
         this.filterJobs(this.filters)
       } catch (error) {
         console.error(error)
@@ -151,16 +147,11 @@ export default {
       }
     },
     async searchJob(keyword) {
-      this.keyword = keyword
       this.isLoading = true;
       try {
         const { data } = await axios.get(`${process.env.VUE_APP_BASE_URL}?search=${keyword}`)
-        this.jobsArrInitial = _.map(data.jobs, (job) => {
-          return {
-            ...job,
-            candidate_required_location: job.candidate_required_location.toLowerCase()
-          }
-        })
+        this.jobsArrInitial = data.jobs
+        this.keyword = keyword
         this.filterJobs(this.filters)
       } catch (error) {
         console.error(error)
@@ -174,13 +165,26 @@ export default {
     filterJobs(filters) {
       this.isLoading = true
       const filteredJobs = _.filter(this.jobsArrInitial, (job) => {
-        return (filters.fullTime ? job.job_type.includes('full_time') : job.job_type !== 'full_time') &&
-                (filters.location.length > 0 || filters.search ? (filters.location.includes(job.candidate_required_location) ||
-                  (filters.search && job.candidate_required_location.includes(filters.search.toLowerCase()))) : job)
+        // Rule #1
+        if(filters.location.length === 0 && (!filters.keyword || (filters.keyword && filters.keyword.length === 0))) {
+          return filters.fullTime ? job.job_type.includes('full_time') : job.job_type !== 'full_time'
+        }
+        // Rule #2
+        else if((filters.location.length === 0  && filters.keyword) || (filters.location.length === 0 && !filters.keyword && !this.keyword)) {
+          return filters.keyword ? job.candidate_required_location.includes(filters.keyword) : null
+        }
+        // Rule #3
+        else {
+          console.log('heree')
+          return (filters.fullTime ? job.job_type.includes('full_time') : job.job_type !== 'full_time')
+            && (filters.location.length > 0 ? filters.location.find(item => job.candidate_required_location.includes(item)) : job)
+            && (filters.keyword ? job.candidate_required_location.includes(filters.keyword) : job)
+        }
       });
+      this.keyword = filters.keyword
       this.jobList = this.paginate(filteredJobs, this.limitItems)
-      this.totalPages = Math.ceil(this.jobList.length / this.limitItems)
-      this.jobs = this.jobList[0]
+      this.totalPages = Math.ceil(filteredJobs.length / this.limitItems)
+      this.jobs = this.jobList.length ? this.jobList[0] : []
       if(this.$refs.paginate !== undefined) {
         this.$refs.paginate.innerValue = 1
       }
