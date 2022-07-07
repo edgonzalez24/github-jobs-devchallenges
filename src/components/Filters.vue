@@ -87,16 +87,18 @@ export default {
     return {
       checkedLocations: this.filters.location,
       checkedFullTime: this.filters.fullTime,
-      search: this.filters.search,
+      search: this.filters.keyword,
     }
   },
   methods: {
     searchInput() {
-      this.$emit('filter', {
+      setTimeout(() => {
+        this.$emit('filter', {
           fullTime: this.checkedFullTime,
           keyword: this.search,
           location: this.checkedLocations
         })
+      }, 500);
     }
   }
 };

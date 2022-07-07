@@ -12,7 +12,7 @@
           class="w-full h-14 py-3 pl-10 pr-4 text-gray-100 bg-white border rounded focus:border-blue-500 hover:border-blue-500 focus:outline-none focus:ring hover:ring text-xs font-normal transition duration-500 ease-in-out placeholder:text-gray-100 placeholder:font-normal"
           :placeholder="placeholder"
         >
-        <span class="absolute inset-y-0 right-0 pr-1 py-1 w-36">
+        <span class="absolute inset-y-0 right-0 pr-1 py-1 md:w-36 w-28">
           <div class="flex h-full items-center text-gray-100">
             <p v-show="keyword && keyword.length" @click="clear" class="pr-3 cursor-pointer">
               x
@@ -47,6 +47,13 @@ export default {
   data: () => ({
     keyword: null
   }),
+  watch: {
+    keyword(newVal) {
+      if(newVal.length === 0){
+        this.$emit('fetchData')
+      }
+    }
+  },
   methods: {
     clear() {
       this.keyword = null
@@ -55,9 +62,6 @@ export default {
     searchJob() {
       if(this.keyword && this.keyword.length > 0) {
         this.$emit('search', this.keyword)
-      } else {
-        console.log('here')
-        this.$emit('fetchData')
       }
     }
   }

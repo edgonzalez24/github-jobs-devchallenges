@@ -6,15 +6,15 @@
         <p class="text-gray-50 font-medium text-xs">not found</p>
       </div>
     </div>
-    <div class="w-full flex">
+    <div class="w-full flex flex-wrap">
       <div class="w-full">
         <p class="text-dark-500 font-bold text-xs">{{ job.company_name }}</p>
-        <p class="text-dark-500 font-normal text-lg"> {{ job.title }}</p>
+        <p class="text-dark-500 font-normal sm:text-lg text-base sm:mb-0 mb-2"> {{ job.title }}</p>
         <span class="border border-dark-500 rounded text-xs px-2 py-1 text-dark-500 font-bold border-solid capitalize">
           {{ typeJob }}
         </span>
       </div>
-      <div class="w-auto flex flex-row space-x-4 items-end">
+      <div class="w-auto flex flex-row space-x-4 items-end sm:mt-0 mt-5">
         <span
           class="whitespace-nowrap inline-flex text-xs items-center text-gray-100 font-medium"
         >

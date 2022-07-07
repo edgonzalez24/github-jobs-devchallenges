@@ -1,8 +1,8 @@
 <template>
-  <div class="max-w-7xl xl:px-0 md:px-10 px-5 mx-auto min-h-screen">
+  <div class="max-w-7xl xl:px-0 md:px-10 px-3 mx-auto min-h-screen">
     <!-- Banner Search -->
     <div class="banner w-full rounded-lg overflow-hidden flex justify-center items-center">
-      <div class="md:w-search w-2/3">
+      <div class="md:w-search w-11/12">
         <Search
           placeholder="Title, companies, expertise or benefits"
           @search="searchJob"
@@ -20,7 +20,7 @@
         />
       </div>
       <!-- Content List -->
-      <div class="md:w-2/3 w-full">
+      <div class="md:w-2/3 w- md:mt-0 mt-5">
         <div v-show="isLoading">
           <div v-for="(_, index) in new Array(5)" :key="index" class="mb-4" >
             <CardSkeleton />
@@ -35,10 +35,10 @@
             </div>
           </template>
           <template v-else>
-            <h5 class="text-center text-lg font-medium text-dark-500 italic">No results were found similar to: {{ keyword }}</h5>
+            <h5 class="text-center text-lg font-medium text-dark-500 italic">No results found</h5>
           </template>
         </div>
-        <div v-if="jobs.length > 0" class="flex justify-end">
+        <div v-if="jobs.length > 0" class="flex sm:justify-end justify-center">
           <div class="w-auto">
             <paginate
               ref="paginate"
@@ -81,7 +81,6 @@ export default {
     jobsArrInitial: [],
     jobList: [],
     locations: ['Europe', 'UK','USA', 'Worldwide'],
-    keyword: '',
     totalPages: 0,
     iconPrev: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512"><path d="M192 448c-8.188 0-16.38-3.125-22.62-9.375l-160-160c-12.5-12.5-12.5-32.75 0-45.25l160-160c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25L77.25 256l137.4 137.4c12.5 12.5 12.5 32.75 0 45.25C208.4 444.9 200.2 448 192 448z"/></svg>',
     iconNext: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512"><path d="M64 448c-8.188 0-16.38-3.125-22.62-9.375c-12.5-12.5-12.5-32.75 0-45.25L178.8 256L41.38 118.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0l160 160c12.5 12.5 12.5 32.75 0 45.25l-160 160C80.38 444.9 72.19 448 64 448z"/></svg>',
@@ -102,7 +101,7 @@ export default {
       setTimeout(() => {
       this.isLoading = false
       this.animation()
-      }, 1500);
+      }, 1000);
     },
     paginate(arr, size) {
       return arr.reduce((acc, val, i) => {
@@ -138,12 +137,7 @@ export default {
         this.jobsArrInitial = data.jobs
         this.filterJobs(this.filters)
       } catch (error) {
-        console.error(error)
-      } finally {
-        setTimeout(() => {
-          this.isLoading = false
-          this.animation()
-        }, 1500);
+        this.$toast.error('Oopps! Something went wrong.')
       }
     },
     async searchJob(keyword) {
@@ -151,37 +145,18 @@ export default {
       try {
         const { data } = await axios.get(`${process.env.VUE_APP_BASE_URL}?search=${keyword}`)
         this.jobsArrInitial = data.jobs
-        this.keyword = keyword
         this.filterJobs(this.filters)
       } catch (error) {
-        console.error(error)
-      } finally {
-        setTimeout(() => {
-          this.isLoading = false
-          this.animation()
-        }, 1500);
+        this.$toast.error('Oopps! Something went wrong.')
       }
     },
     filterJobs(filters) {
-      this.isLoading = true
+      this.filters = filters
       const filteredJobs = _.filter(this.jobsArrInitial, (job) => {
-        // Rule #1
-        if(filters.location.length === 0 && (!filters.keyword || (filters.keyword && filters.keyword.length === 0))) {
-          return filters.fullTime ? job.job_type.includes('full_time') : job.job_type !== 'full_time'
-        }
-        // Rule #2
-        else if((filters.location.length === 0  && filters.keyword) || (filters.location.length === 0 && !filters.keyword && !this.keyword)) {
-          return filters.keyword ? job.candidate_required_location.includes(filters.keyword) : null
-        }
-        // Rule #3
-        else {
-          console.log('heree')
-          return (filters.fullTime ? job.job_type.includes('full_time') : job.job_type !== 'full_time')
-            && (filters.location.length > 0 ? filters.location.find(item => job.candidate_required_location.includes(item)) : job)
-            && (filters.keyword ? job.candidate_required_location.includes(filters.keyword) : job)
-        }
+        return (filters.fullTime ? job.job_type.includes('full_time') : job.job_type !== 'full_time')
+          && (filters.location.length > 0 ? filters.location.find(item => job.candidate_required_location.includes(item)) : job)
+          || (filters.keyword && job.candidate_required_location.includes(filters.keyword))
       });
-      this.keyword = filters.keyword
       this.jobList = this.paginate(filteredJobs, this.limitItems)
       this.totalPages = Math.ceil(filteredJobs.length / this.limitItems)
       this.jobs = this.jobList.length ? this.jobList[0] : []
@@ -191,7 +166,7 @@ export default {
       setTimeout(() => {
         this.isLoading = false
         this.animation()
-      }, 1500);
+      }, 1000);
     }
   }
 }
