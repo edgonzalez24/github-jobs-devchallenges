@@ -14,7 +14,7 @@
           {{ typeJob }}
         </span>
       </div>
-      <div class="w-auto flex flex-row space-x-4 items-end sm:mt-0 mt-5">
+      <div class="w-auto flex flex-row space-x-4 items-end mt-5">
         <span
           class="whitespace-nowrap inline-flex text-xs items-center text-gray-100 font-medium"
         >

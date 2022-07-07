@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent class="w-full">
+  <form @submit.prevent class="w-full" id="search">
     <div class="relative shadow-search bg-white rounded">
       <div class="w-full relative">
         <span class="absolute inset-y-0 left-0 flex items-center pl-3">
@@ -9,7 +9,7 @@
         <input
           v-model="keyword"
           type="text"
-          class="w-full h-14 py-3 pl-10 pr-4 text-gray-100 bg-white border rounded focus:border-blue-500 hover:border-blue-500 focus:outline-none focus:ring hover:ring text-xs font-normal transition duration-500 ease-in-out placeholder:text-gray-100 placeholder:font-normal"
+          class="w-full h-14 py-3 pl-10 pr-4 text-gray-100 bg-white border rounded focus:border-blue-500 hover:border-blue-500 focus:outline-none focus:ring hover:ring text-xs font-normal transition duration-500 ease-in-out placeholder:text-gray-100 placeholder:font-normal sm:placeholder:w-full placeholder:w-20 text-ellipsis"
           :placeholder="placeholder"
         >
         <span class="absolute inset-y-0 right-0 pr-1 py-1 md:w-36 w-28">

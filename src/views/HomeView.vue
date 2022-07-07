@@ -2,7 +2,7 @@
   <div class="max-w-7xl xl:px-0 md:px-10 px-3 mx-auto min-h-screen">
     <!-- Banner Search -->
     <div class="banner w-full rounded-lg overflow-hidden flex justify-center items-center">
-      <div class="md:w-search w-11/12">
+      <div class="lg:w-search w-11/12">
         <Search
           placeholder="Title, companies, expertise or benefits"
           @search="searchJob"
