@@ -159,12 +159,12 @@ export default {
       });
       this.jobList = this.paginate(filteredJobs, this.limitItems)
       this.totalPages = Math.ceil(filteredJobs.length / this.limitItems)
-      this.jobs = this.jobList.length ? this.jobList[0] : []
       if(this.$refs.paginate !== undefined) {
         this.$refs.paginate.innerValue = 1
       }
       setTimeout(() => {
         this.isLoading = false
+        this.jobs = this.jobList.length ? this.jobList[0] : []
         this.animation()
       }, 1000);
     }
